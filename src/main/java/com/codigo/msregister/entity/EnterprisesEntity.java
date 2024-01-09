@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "enterprises")
-public class EnterpriseEntity extends Audit {
+public class EnterprisesEntity extends Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_enterprises")
@@ -22,4 +22,11 @@ public class EnterpriseEntity extends Audit {
     private String tradeName;
     @Column(name = "status", nullable = false)
     private int status;
+
+    @ManyToOne
+    @JoinColumn(name = "enterprises_type_id_enterprises_type", nullable = false)
+    private EnterprisesTypeEntity enterprisesTypeEntity;
+    @ManyToOne
+    @JoinColumn(name = "documents_type_id_documents_type", nullable = false)
+    private DocumentsTypeEntity documentsTypeEntity;
 }

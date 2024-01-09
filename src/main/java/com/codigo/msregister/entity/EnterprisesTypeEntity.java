@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "enterprises_type")
-public class EnterpriseTypeEntity extends Audit {
+public class EnterprisesTypeEntity extends Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_enterprises_type")
