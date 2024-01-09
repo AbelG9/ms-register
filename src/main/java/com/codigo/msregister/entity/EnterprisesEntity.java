@@ -1,6 +1,7 @@
 package com.codigo.msregister.entity;
 
 import com.codigo.msregister.aggregates.model.Audit;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "enterprises")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EnterprisesEntity extends Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +20,7 @@ public class EnterprisesEntity extends Audit {
     private String numDocument;
     @Column(name = "business_name", length = 150, nullable = false)
     private String businessName;
-    @Column(name = "tradename", length = 150, nullable = false)
+    @Column(name = "tradename", length = 150)
     private String tradeName;
     @Column(name = "status", nullable = false)
     private int status;
