@@ -8,6 +8,10 @@ public class Constants {
     //MESSAGES
     public static final String MESSAGE_SUCCESS="Ejecución correcta";
     public static final String MESSAGE_ERROR="Error en la Ejecución";
+    public static final String MESSAGE_ERROR_DATA_NOT_VALID="Error: Durante las validaciones de los Datos";
+    public static final String MESSAGE_ERROR_NON_DATA="No existe datos para el id";
+    public static final String MESSAGE_ZERO_ROWS="No existe Registros en BD";
+    public static final String MESSAGE_ERROR_NOT_UPDATE="Error: No se ejecuto la actualización, Empresa no Existe";
     public static final Integer LENGTH_RUC=15;
     public static final Integer LENGTH_DNI=8;
 
