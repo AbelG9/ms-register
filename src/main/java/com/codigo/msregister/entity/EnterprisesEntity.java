@@ -15,7 +15,7 @@ public class EnterprisesEntity extends Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_enterprises")
-    private int inEnterprises;
+    private int idEnterprises;
     @Column(name = "num_document", length = 15, nullable = false)
     private String numDocument;
     @Column(name = "business_name", length = 150, nullable = false)

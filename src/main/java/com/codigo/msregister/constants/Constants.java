@@ -12,7 +12,8 @@ public class Constants {
     public static final String MESSAGE_ERROR_NON_DATA="No existe datos para el id";
     public static final String MESSAGE_ZERO_ROWS="No existe Registros en BD";
     public static final String MESSAGE_ERROR_NOT_UPDATE="Error: No se ejecuto la actualización, Empresa no Existe";
-    public static final String MESSAGE_NON_DATA_RENIEC="Error: No existe registros en la Api de Reniec";
+    public static final String MESSAGE_NON_DATA_RENIEC="No existe Registros en el API de RENIEC";
+    //data
     public static final Integer LENGTH_RUC=15;
     public static final Integer LENGTH_DNI=8;
 
