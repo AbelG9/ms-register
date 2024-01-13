@@ -16,13 +16,26 @@ public class PersonsController {
 
     @GetMapping("{numero}")
     public ResponseBase getInfoReniec(@PathVariable String numero){
-        ResponseBase responseBase = personsService.getInfoReniec(numero);
-        return responseBase;
+        return personsService.getInfoReniec(numero);
     }
 
     @PostMapping
     public ResponseBase createPerson(@RequestBody RequestPersons requestPersons){
-        ResponseBase responseBase = personsService.createPersons(requestPersons);
-        return responseBase;
+        return personsService.createPersons(requestPersons);
+    }
+
+    @PostMapping("{id}")
+    public ResponseBase findOnePerson(@PathVariable int id) {
+        return personsService.findOnePerson(id);
+    }
+
+    @GetMapping
+    public ResponseBase findAll() {
+        return personsService.findAllPersons();
+    }
+
+    @PatchMapping("{id}")
+    public ResponseBase updatePerson(@PathVariable int id, @RequestBody RequestPersons requestPersons) {
+        return personsService.updatePerson(id, requestPersons);
     }
 }

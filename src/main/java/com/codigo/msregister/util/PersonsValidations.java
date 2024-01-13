@@ -1,6 +1,5 @@
 package com.codigo.msregister.util;
 
-import com.codigo.msregister.aggregates.enums.ETypeDocuments;
 import com.codigo.msregister.aggregates.request.RequestPersons;
 import com.codigo.msregister.constants.Constants;
 import com.codigo.msregister.entity.DocumentsTypeEntity;

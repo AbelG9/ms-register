@@ -8,7 +8,6 @@ public enum ETypeDocuments {
     RUC(02);
 
     private final int value;
-
     ETypeDocuments(int value) {
         this.value = value;
     }

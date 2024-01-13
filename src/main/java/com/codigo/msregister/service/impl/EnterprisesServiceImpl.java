@@ -12,8 +12,6 @@ import com.codigo.msregister.util.EnterprisesValidations;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -70,7 +68,7 @@ public class EnterprisesServiceImpl implements EnterprisesService {
                 return new ResponseBase(Constants.CODE_ERROR, Constants.MESSAGE_ERROR_DATA_NOT_VALID, Optional.empty());
             }
         } else {
-            return new ResponseBase(Constants.CODE_ERROR, Constants.MESSAGE_ERROR_NOT_UPDATE, Optional.empty());
+            return new ResponseBase(Constants.CODE_ERROR, Constants.MESSAGE_ERROR_NOT_UPDATE_ENTERPRISES, Optional.empty());
         }
     }
 

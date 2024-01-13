@@ -37,6 +37,4 @@ public class EnterprisesController {
         ResponseBase responseBase = enterprisesService.updateEnterprise(id, requestEnterprises);
         return responseBase;
     }
-
-
 }

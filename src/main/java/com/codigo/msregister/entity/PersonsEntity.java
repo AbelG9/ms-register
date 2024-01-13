@@ -1,7 +1,6 @@
 package com.codigo.msregister.entity;
 
 import com.codigo.msregister.aggregates.model.Audit;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

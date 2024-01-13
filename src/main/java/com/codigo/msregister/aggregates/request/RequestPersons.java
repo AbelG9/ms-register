@@ -1,6 +1,5 @@
 package com.codigo.msregister.aggregates.request;
 
-import com.codigo.msregister.entity.DocumentsTypeEntity;
 import lombok.Getter;
 import lombok.Setter;
 

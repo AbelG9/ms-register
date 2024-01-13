@@ -12,10 +12,14 @@ import com.codigo.msregister.repository.PersonsRepository;
 import com.codigo.msregister.service.PersonsService;
 import com.codigo.msregister.util.PersonsValidations;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
+@Service
 public class PersonsServiceImpl implements PersonsService {
     private final ReniecClient reniecClient;
     private final PersonsValidations personsValidations;
@@ -57,23 +61,69 @@ public class PersonsServiceImpl implements PersonsService {
     }
 
     @Override
-    public ResponseBase findOne(int id) {
-        return null;
+    public ResponseBase findOnePerson(int id) {
+        Optional<PersonsEntity> person = personsRepository.findById(id);
+        if (person.isPresent()) {
+            return new ResponseBase(Constants.CODE_SUCCESS, Constants.MESSAGE_SUCCESS, person);
+        } else {
+            return new ResponseBase(Constants.CODE_ERROR, Constants.MESSAGE_ZERO_ROWS, Optional.empty());
+        }
     }
 
     @Override
-    public ResponseBase findAll() {
-        return null;
+    public ResponseBase findAllPersons() {
+        List<PersonsEntity> persons = personsRepository.findAll();
+        if (!persons.isEmpty()) {
+            return new ResponseBase(Constants.CODE_SUCCESS, Constants.MESSAGE_SUCCESS, Optional.of(persons));
+        } else {
+            return new ResponseBase(Constants.CODE_ERROR, Constants.MESSAGE_ZERO_ROWS, Optional.empty());
+        }
     }
 
     @Override
-    public ResponseBase updatePersons(int id, RequestPersons requestPersons) {
-        return null;
+    public ResponseBase updatePerson(int id, RequestPersons requestPersons) {
+        boolean existsPerson = personsRepository.existsById(id);
+        if (existsPerson) {
+            Optional<PersonsEntity> persons = personsRepository.findById(id);
+            boolean validationEntity = personsValidations.validateInput(requestPersons);
+            if (validationEntity) {
+                PersonsEntity personsUpdate = getPersonsEntityUpdate(requestPersons, persons.get());
+                personsRepository.save(personsUpdate);
+                return new ResponseBase(Constants.CODE_SUCCESS, Constants.MESSAGE_SUCCESS, Optional.of(personsUpdate));
+            } else {
+                return new ResponseBase(Constants.CODE_ERROR, Constants.MESSAGE_ERROR_DATA_NOT_VALID, Optional.empty());
+            }
+        } else {
+            return new ResponseBase(Constants.CODE_ERROR, Constants.MESSAGE_ERROR_NOT_UPDATE_PERSONS, Optional.empty());
+        }
+    }
+
+    @Cacheable(value = "REGISTER")
+    private ResponseReniec getExecutionReniec(String numero) {
+        String authorization = "Bearer "+tokenReniec;
+        return reniecClient.getInfoReniec(numero, authorization);
+    }
+
+    private PersonsEntity getPersons(RequestPersons requestPersons, PersonsEntity personsEntity, boolean isUpdate) {
+        personsEntity.setNumDocument(requestPersons.getNumDocument());
+        personsEntity.setEmail(requestPersons.getEmail());
+        personsEntity.setTelephone(requestPersons.getTelephone());
+        personsEntity.setStatus(Constants.STATUS_ACTIVE);
+        personsEntity.setDocumentsTypeEntity(getDocumentsType(requestPersons));
+        personsEntity.setEnterprisesEntity(getEnterprisesEntity(requestPersons));
+        if (isUpdate) {
+            personsEntity.setUserModif(Constants.AUDIT_ADMIN);
+            personsEntity.setDateModif(getTimestamp());
+        } else {
+            personsEntity.setUserCreate(Constants.AUDIT_ADMIN);
+            personsEntity.setDateCreate(getTimestamp());
+        }
+
+        return personsEntity;
     }
 
     private PersonsEntity getPersonsEntity(RequestPersons requestPersons) {
         PersonsEntity personsEntity = new PersonsEntity();
-        personsEntity.setNumDocument(requestPersons.getNumDocument());
         //Ejecutando reniec
         ResponseReniec reniec = getExecutionReniec(requestPersons.getNumDocument());
         if (reniec != null) {
@@ -82,20 +132,13 @@ public class PersonsServiceImpl implements PersonsService {
         } else {
             return null;
         }
-        personsEntity.setEmail(requestPersons.getEmail());
-        personsEntity.setTelephone(requestPersons.getTelephone());
-        personsEntity.setStatus(Constants.STATUS_ACTIVE);
-        personsEntity.setDocumentsTypeEntity(getDocumentsType(requestPersons));
-        personsEntity.setEnterprisesEntity(getEnterprisesEntity(requestPersons));
-        personsEntity.setUserCreate(Constants.AUDIT_ADMIN);
-        personsEntity.setDateCreate(getTimestamp());
-        return  personsEntity;
+        getPersons(requestPersons, personsEntity, false);
+        return personsEntity;
     }
 
-    private ResponseReniec getExecutionReniec(String numero) {
-        String authorization = "Bearer "+tokenReniec;
-        ResponseReniec reniec = reniecClient.getInfoReniec(numero, authorization);
-        return reniec;
+    private PersonsEntity getPersonsEntityUpdate(RequestPersons requestPersons, PersonsEntity personsEntity) {
+        getPersons(requestPersons, personsEntity, true);
+        return personsEntity;
     }
 
     DocumentsTypeEntity getDocumentsType(RequestPersons requestPersons) {
@@ -112,7 +155,6 @@ public class PersonsServiceImpl implements PersonsService {
 
     private Timestamp getTimestamp(){
         long currentTime = System.currentTimeMillis();
-        Timestamp timestamp = new Timestamp(currentTime);
-        return timestamp;
+        return new Timestamp(currentTime);
     }
 }
